@@ -1,0 +1,19 @@
+{{ $crossorigin := .crossorigin | default "anonymous" }}
+{{ $href := .href }}
+{{ $integrity := .integrity }}
+{{ $page := .page }}
+{{ $raw := .raw }}
+{{ $referrerpolicy := .referrerpolicy | default "no-referrer" }}
+
+{{ if $raw }}
+    {{ $href = relLangURL $href }}
+{{ else }}
+    {{ $resource := (partial "paige/func-resource.html" (dict
+        "page" $page
+        "url" (relLangURL $href)
+    )) | minify | fingerprint }}
+    {{ $href = $resource.RelPermalink }}
+    {{ $integrity = $resource.Data.Integrity }}
+{{ end }}
+
+<link {{ with $crossorigin }} crossorigin="{{ . }}" {{ end }} href="{{ $href }}" integrity="{{ $integrity }}" {{ with $referrerpolicy }} referrerpolicy="{{ . }}" {{ end }} rel="stylesheet">

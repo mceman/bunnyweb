@@ -1,0 +1,21 @@
+{{ $crossorigin := .crossorigin | default "anonymous" }}
+{{ $defer := .defer | default "defer" }}
+{{ $integrity := .integrity }}
+{{ $onload := .onload | safeJS }}
+{{ $page := .page }}
+{{ $referrerpolicy := .referrerpolicy | default "no-referrer" }}
+{{ $raw := .raw }}
+{{ $src := .src }}
+
+{{ if $raw }}
+    {{ $src = relLangURL $src }}
+{{ else }}
+    {{ $resource := (partial "paige/func-resource.html" (dict
+        "page" $page
+        "url" (relLangURL $src)
+    )) | minify | fingerprint }}
+    {{ $integrity = $resource.Data.Integrity }}
+    {{ $src = $resource.RelPermalink }}
+{{ end }}
+
+<script {{ with $crossorigin }} crossorigin="{{ . }}" {{ end }} {{ with $defer }} defer {{ end }} integrity="{{ $integrity }}" {{ with $onload }} onload="{{ . }}" {{ end }} {{ with $referrerpolicy }} referrerpolicy="{{ . }}" {{ end }} src="{{ $src }}"></script>

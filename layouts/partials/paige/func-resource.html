@@ -1,0 +1,30 @@
+{{ $page := .page }}
+{{ $url := .url }}
+
+{{ $resource := "" }}
+
+{{ with $page.Resources.GetMatch $url }}
+    {{ $resource = . }}
+{{ else }}
+    {{ with $page.Resources.Get $url }}
+        {{ $resource = . }}
+    {{ else }}
+        {{ with resources.GetMatch $url }}
+            {{ $resource = . }}
+        {{ else }}
+            {{ with resources.Get $url }}
+                {{ $resource = . }}
+            {{ else }}
+                {{ with resources.GetRemote $url }}
+                    {{ $resource = . }}
+                {{ end }}
+            {{ end }}
+        {{ end }}
+    {{ end }}
+{{ end }}
+
+{{ if not $resource }}
+    {{ errorf "invalid resource: %q" $url }}
+{{ end }}
+
+{{ return $resource }}
