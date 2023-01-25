@@ -1,0 +1,54 @@
+{{ $alt := .alt }}
+{{ $caption := .caption }}
+{{ $compact := .compact }}
+{{ $float := .float }}
+{{ $height := .height }}
+{{ $horizontal := .horizontal }}
+{{ $link := .link }}
+{{ $maxheight := .maxheight }}
+{{ $maxwidth := .maxwidth }}
+{{ $method := .method }}
+{{ $number := .number }}
+{{ $numbered := .numbered }}
+{{ $options := .options }}
+{{ $page := .page }}
+{{ $raw := .raw }}
+{{ $resource := .resource }}
+{{ $src := .src }}
+{{ $title := .title }}
+{{ $vertical := .vertical }}
+{{ $width := .width }}
+
+{{ $content := partial "paige/img.html" (dict
+    "alt" $alt
+    "class" "img-fluid"
+    "method" $method
+    "options" $options
+    "page" $page
+    "raw" $raw
+    "resource" $resource
+    "src" $src
+    "title" $title
+) }}
+
+{{ if $link }}
+    {{ $content = partial "paige/a.html" (dict
+        "content" $content
+        "href" $link
+    ) }}
+{{ end }}
+
+{{ partial "paige/figure.html" (dict
+    "caption" $caption
+    "compact" $compact
+    "content" $content
+    "float" $float
+    "height" $height
+    "horizontal" $horizontal
+    "maxheight" $maxheight
+    "maxwidth" $maxwidth
+    "number" $number
+    "numbered" $numbered
+    "vertical" $vertical
+    "width" $width
+) }}
